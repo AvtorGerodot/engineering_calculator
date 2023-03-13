@@ -2,6 +2,8 @@
 
 #include "stack.h"
 
+//D:\ƒанил\прогание\C++\ingeneering calc
+
 namespace ingeneeringcalc {
 
 	using namespace System;
@@ -30,24 +32,39 @@ namespace ingeneeringcalc {
 		/// ќсвободить все используемые ресурсы.
 		/// </summary>
 		
-		myStack<String^> ^ math_string_parse(String^ str) {
+		char* ConvertToCString(String^ str) {
+			IntPtr^ ptr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
+			return (char*)ptr->ToPointer();
+		}
+		
+		myStack<char>* math_string_parse(String^ str) {
+			//str->Replace(" ", "");
+			printf("%s\n\n", ConvertToCString(str));
+			
 			int brackets_count = 0;
-			myStack<String^>^ elements = gcnew myStack<String^>();
+			myStack<char>* elements = new myStack<char>();
 			//elements->isEmpty();
 
-			for (int i = 0, numflag = 0, start = 0; i < str->Length && brackets_count >= 0; i++) {
-				if (str[i] - '0' < 10 || str[i] == ',') numflag = 1;
-				else {
-					if (numflag) {
-						//можно ли написать нормально?
-						//String^ systemstring = gcnew String(orig);
-						array<wchar_t>^ temp;
-						str->CopyTo(start, temp, 0, i-start);
-						elements->push(gcnew String(temp));
-						numflag = 0;
-					}
-					start = i;
+			String^ temp = L"";
+			bool all_right = 1;
+			for (int i = 0, comma = 0; i < str->Length && brackets_count >= 0 && all_right; i++) {
+				if ((str[i] - '0' >= 0 && str[i] - '0' < 10) || str[i] == ',') { 
+					temp += str[i]; 
+					if (str[i] == ',') comma++; 
+					if (comma > 1) all_right = 0;
 				}
+				else {
+					if (temp->Length > 0) {
+						elements->push(ConvertToCString(temp));
+						temp = L"";
+					}
+					
+				}
+			}
+			if (!all_right) {
+				tb1->Text = L"ERROR";
+				delete elements;
+				elements = 0;
 			}
 			return elements;
 		}
@@ -119,19 +136,12 @@ namespace ingeneeringcalc {
 #pragma endregion
 	private: System::Void equals_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (tb1->Text->Length > 0) {
-			String^ math_str = tb1->Text;
+			String^ math_str = tb1->Text + '\n';
 			tb1->Text = L"";
-			myStack<String^>^ math_stack = math_string_parse(math_str);
-			math_stack->print();
+			myStack<char>* math_stack = math_string_parse(math_str);
+			if(math_stack) math_stack->print();
 		}
 		else tb1->Text = L"0";
-		/*myStack<String^>^ st = gcnew myStack<String^>();
-		st->push(L"123");
-		st->push(L"456");
-		st->print();
-		String^ a;
-		st->pop(a);
-		st->print();*/
 	}
 	};
 }
