@@ -1,0 +1,4 @@
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\x64\Debug\ingeneering calc.vcxproj.AssemblyReference.cache
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\x64\Debug\ingeneering calc.vcxproj.SuggestedBindingRedirects.cache
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\x64\Debug\ingeneeringcalc.MyForm.resources
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\x64\Debug\ingeneering calc.vcxproj.GenerateResource.cache

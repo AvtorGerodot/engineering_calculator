@@ -1,0 +1,13 @@
+﻿  MyForm.cpp
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\MyForm.h(33,53): warning C4677: math_string_parse: сигнатура члена, не являющегося частным, содержит частный тип сборки "myStack<System::String ^>"
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\MyForm.h(33): message : см. объявление "myStack<System::String ^>"
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\stack.h(51,11): warning C4477: "printf": в строке форматирования "%s" требуется аргумент типа "char *", но вариативный аргумент "1" имеет тип "T"
+          with
+          [
+              T=System::String ^
+          ]
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\stack.h(47): message : во время компиляции функции-члена класс шаблон "void myStack<System::String ^>::print(void)"
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\MyForm.h(125): message : выполняется компиляция ссылки на экземпляр шаблон функции "void myStack<System::String ^>::print(void)"
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\MyForm.h(35): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "myStack<System::String ^>"
+  MyForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
+  ingeneering calc.vcxproj -> D:\Данил\прогание\C++\ingeneering calc\x64\Debug\engineering calc.exe
