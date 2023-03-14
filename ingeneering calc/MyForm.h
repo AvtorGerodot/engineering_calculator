@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stack.h"
+#include <string.h>
 
 //D:\Данил\прогание\C++\ingeneering calc
 
@@ -34,11 +35,16 @@ namespace ingeneeringcalc {
 		
 		char* ConvertToCString(String^ str) {
 			IntPtr^ ptr = System::Runtime::InteropServices::Marshal::StringToHGlobalAnsi(str);
+			/*const char* const_ptr = (char*)ptr->ToPointer();
+			char* dynamic_ptr = new char[strlen(const_ptr)];*/
 			return (char*)ptr->ToPointer();
 		}
 		
 		myStack<char>* math_string_parse(String^ str) {
-			//str->Replace(" ", "");
+			
+			String^ f = L" ";
+			String^ s = L"";
+			str = str->Replace(" ", "");
 			printf("%s\n\n", ConvertToCString(str));
 			
 			int brackets_count = 0;
@@ -49,6 +55,7 @@ namespace ingeneeringcalc {
 			bool all_right = 1;
 			for (int i = 0, comma = 0; i < str->Length && brackets_count >= 0 && all_right; i++) {
 				if ((str[i] - '0' >= 0 && str[i] - '0' < 10) || str[i] == ',') { 
+					//переписать логику
 					temp += str[i]; 
 					if (str[i] == ',') comma++; 
 					if (comma > 1) all_right = 0;
@@ -57,10 +64,26 @@ namespace ingeneeringcalc {
 					if (temp->Length > 0) {
 						elements->push(ConvertToCString(temp));
 						temp = L"";
+						comma = 0;
 					}
-					
+
+					String^ operators = L"+-*/()";
+					temp = str[i].ToString();
+					if (operators->Contains(temp)) {
+						elements->push(ConvertToCString(temp));
+						temp = L"";
+						if (str[i] == '(') brackets_count++;
+						else if (str[i] == ')') brackets_count--;
+					}
+					else all_right = 0;
 				}
 			}
+			if (temp->Length > 0) {
+				elements->push(ConvertToCString(temp));
+				temp = L"";
+			}
+
+
 			if (!all_right) {
 				tb1->Text = L"ERROR";
 				delete elements;
@@ -119,6 +142,8 @@ namespace ingeneeringcalc {
 			this->tb1->Name = L"tb1";
 			this->tb1->Size = System::Drawing::Size(558, 142);
 			this->tb1->TabIndex = 1;
+			this->tb1->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::tb1_Click);
+			this->tb1->TextChanged += gcnew System::EventHandler(this, &MyForm::tb1_TextChanged);
 			// 
 			// MyForm
 			// 
@@ -136,12 +161,21 @@ namespace ingeneeringcalc {
 #pragma endregion
 	private: System::Void equals_Click(System::Object^ sender, System::EventArgs^ e) {
 		if (tb1->Text->Length > 0) {
-			String^ math_str = tb1->Text + '\n';
+			String^ math_str = tb1->Text;
 			tb1->Text = L"";
 			myStack<char>* math_stack = math_string_parse(math_str);
-			if(math_stack) math_stack->print();
+			if (math_stack) {
+				math_stack->print();
+				delete math_stack;
+			}
 		}
 		else tb1->Text = L"0";
 	}
-	};
+	private: System::Void tb1_Click(System::Object^ sender, System::Windows::Forms::MouseEventArgs^ e) {
+		if (tb1->Text == L"0" || tb1->Text == L"ERROR") tb1->Text = L"";
+	}
+
+	private: System::Void tb1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+	}
+};
 }

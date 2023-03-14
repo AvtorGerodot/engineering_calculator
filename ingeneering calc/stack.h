@@ -8,9 +8,9 @@ template <typename T>
 struct Node {
 	T* data;
 	Node<T>* next;
-	~Node() {
+	/*~Node() {
 		delete data;
-	}
+	}*/
 };
 
 template <typename T>
@@ -22,7 +22,7 @@ public:
 	}
 	~myStack() {
 		while (this->top) {
-			Node<T>* temp = top;
+			Node<T>* temp = this->top;
 			this->top = this->top->next;
 			delete temp;
 		}
