@@ -41,9 +41,6 @@ namespace ingeneeringcalc {
 		}
 		
 		myStack<char>* math_string_parse(String^ str) {
-			
-			String^ f = L" ";
-			String^ s = L"";
 			str = str->Replace(" ", "");
 			printf("%s\n\n", ConvertToCString(str));
 			
@@ -52,13 +49,13 @@ namespace ingeneeringcalc {
 			//elements->isEmpty();
 
 			String^ temp = L"";
-			bool all_right = 1;
-			for (int i = 0, comma = 0; i < str->Length && brackets_count >= 0 && all_right; i++) {
+			bool all_right = 1, dual_operator = 0;
+			for (int i = 0, comma = 0; i < str->Length && all_right; i++) {
 				if ((str[i] - '0' >= 0 && str[i] - '0' < 10) || str[i] == ',') { 
 					//переписать логику
-					temp += str[i]; 
+					temp += str[i];
+					dual_operator = 0;
 					if (str[i] == ',') comma++; 
-					if (comma > 1) all_right = 0;
 				}
 				else {
 					if (temp->Length > 0) {
@@ -68,19 +65,33 @@ namespace ingeneeringcalc {
 					}
 
 					String^ operators = L"+-*/()";
+					String^ trigonom_func = L"sin cos tan ctg";
 					temp = str[i].ToString();
 					if (operators->Contains(temp)) {
 						elements->push(ConvertToCString(temp));
 						temp = L"";
-						if (str[i] == '(') brackets_count++;
-						else if (str[i] == ')') brackets_count--;
+						if (str[i] == '(') { brackets_count++; dual_operator = 0; }
+						else if (str[i] == ')') { brackets_count--; dual_operator = 0; }
+						else dual_operator++;
+					}
+					else if (str[i] == 's' || str[i] == 'c' || str[i] == 't') {
+						for (int tick = 1; i + tick < str->Length && tick < 3; tick++)
+							temp += str[i + tick].ToString();
+						i += 2;
+						printf("%s|%c\n", ConvertToCString(temp), str[i]);
+						if (trigonom_func->Contains(temp)) elements->push(ConvertToCString(temp));
+						else all_right = 0;
+						temp = L"";
 					}
 					else all_right = 0;
 				}
+				//всевозможные проверки
+				if (dual_operator > 1 || brackets_count < 0 || comma > 1) all_right = 0;
 			}
 			if (temp->Length > 0) {
 				elements->push(ConvertToCString(temp));
 				temp = L"";
+				//dual_operator = 0;
 			}
 
 
