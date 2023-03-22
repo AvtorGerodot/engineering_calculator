@@ -49,49 +49,48 @@ namespace ingeneeringcalc {
 			//elements->isEmpty();
 
 			String^ temp = L"";
+			String^ nums = L"1234567890,";
+			String^ operators = L"+-*/()";
+			String^ trigonom_func = L"sin cos tan ctg";
 			bool all_right = 1, dual_operator = 0;
 			for (int i = 0, comma = 0; i < str->Length && all_right; i++) {
-				if ((str[i] - '0' >= 0 && str[i] - '0' < 10) || str[i] == ',') { 
-					//переписать логику
-					temp += str[i];
-					dual_operator = 0;
-					if (str[i] == ',') comma++; 
-				}
-				else {
-					if (temp->Length > 0) {
+				temp += str[i];
+				if (nums->Contains(temp)) { 
+					for (i++; nums->Contains(str[i].ToString()) && i < str->Length; i++) {
+						temp += str[i];
+						dual_operator = 0;
+						if (str[i] == ',') comma++;
+					}
+					i--;
+					if (comma > 1) all_right = 0;
+					else {
 						elements->push(ConvertToCString(temp));
 						temp = L"";
 						comma = 0;
 					}
-
-					String^ operators = L"+-*/()";
-					String^ trigonom_func = L"sin cos tan ctg";
-					temp = str[i].ToString();
-					if (operators->Contains(temp)) {
+				}
+				else if (operators->Contains(temp)) {
+					if (str[i] == '(') { brackets_count++; dual_operator = 0; }
+					else if (str[i] == ')') { brackets_count--; dual_operator = 0; }
+					else dual_operator++;
+					if (dual_operator > 1 || brackets_count < 0) all_right = 0;
+					else {
 						elements->push(ConvertToCString(temp));
 						temp = L"";
-						if (str[i] == '(') { brackets_count++; dual_operator = 0; }
-						else if (str[i] == ')') { brackets_count--; dual_operator = 0; }
-						else dual_operator++;
 					}
-					else if (str[i] == 's' || str[i] == 'c' || str[i] == 't') {
-						for (int tick = 1; i + tick < str->Length && tick < 3; tick++)
-							temp += str[i + tick].ToString();
-						i += 2;
-						printf("%s|%c\n", ConvertToCString(temp), str[i]);
-						if (trigonom_func->Contains(temp)) elements->push(ConvertToCString(temp));
-						else all_right = 0;
-						temp = L"";
-					}
-					else all_right = 0;
 				}
+				else if (str[i] == 's' || str[i] == 'c' || str[i] == 't') {
+					for (int tick = 1; i + tick < str->Length && tick < 3; tick++)
+						temp += str[i + tick]; // .ToString()
+					i += 2;
+					//printf("%s|%c\n", ConvertToCString(temp), str[i]);
+					if (trigonom_func->Contains(temp)) elements->push(ConvertToCString(temp));
+					else all_right = 0;
+					temp = L"";
+				}
+				else all_right = 0;
 				//всевозможные проверки
-				if (dual_operator > 1 || brackets_count < 0 || comma > 1) all_right = 0;
-			}
-			if (temp->Length > 0) {
-				elements->push(ConvertToCString(temp));
-				temp = L"";
-				//dual_operator = 0;
+				
 			}
 
 

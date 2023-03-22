@@ -1,2 +1,4 @@
-﻿  MyForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
+﻿  MyForm.cpp
+D:\Данил\прогание\C++\ingeneering calc\ingeneering calc\MyForm.h(76,10): warning C4804: >: небезопасное использование типа "bool" в операции
+  MyForm.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
   ingeneering calc.vcxproj -> D:\Данил\прогание\C++\ingeneering calc\x64\Debug\engineering calc.exe
